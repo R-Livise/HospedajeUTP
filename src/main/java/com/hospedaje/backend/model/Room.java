@@ -12,10 +12,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author rafael
  *
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "room")
 public class Room {

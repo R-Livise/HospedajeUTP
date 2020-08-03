@@ -17,8 +17,8 @@ import com.hospedaje.backend.model.UserHotel;
 @Repository
 public interface IUserRepository extends JpaRepository<UserHotel, Long>{
 
-	@Query("from UserHotel uh where uh.nickname = :nickname")
-	public UserHotel findByNickname(@Param("nickname") String nickname);
+	@Query("from UserHotel uh where uh.email = :email")
+	public UserHotel findByNickname(@Param("email") String email);
 	
 	@Query("from UserHotel uh where uh.id = :id")
 	public UserHotel findByID(@Param(value = "id") Long id);

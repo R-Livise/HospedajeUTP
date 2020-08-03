@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -21,6 +23,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -42,16 +45,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class DataBaseConfiguration {
 
-//	@Bean
-//	public LocalSessionFactoryBean sessionFactory() {
-//		LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
-//		sessionFactoryBean.setDataSource(dataSource());
-//		sessionFactoryBean.setPackagesToScan("com.restaurant.backend.model");
-//		sessionFactoryBean.setHibernateProperties(hibernateProperties());
-//
-//		return sessionFactoryBean;
-//	}
-
 	// Configuracion de la base de datos
 	@Bean
 	public DataSource dataSource() {
@@ -65,6 +58,7 @@ public class DataBaseConfiguration {
 		return dataSource;
 	}
 
+	 
 	@Bean
 	public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
 	    return new PersistenceExceptionTranslationPostProcessor();
@@ -72,7 +66,7 @@ public class DataBaseConfiguration {
 	 
 	public Properties additionalProperties() {
 	    Properties properties = new Properties();
-//	    properties.setProperty("hibernate.hbm2ddl.auto", "create");
+	    properties.setProperty("hibernate.hbm2ddl.auto", "update");
 	    properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
 	    properties.setProperty("hibernate.show_sql", "true");
 	       
@@ -138,11 +132,22 @@ public class DataBaseConfiguration {
 
    @Bean
    public ViewResolver viewResolver() {
-	   ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();   
+	   ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();  
+	   viewResolver.setOrder(2);
        viewResolver.setTemplateEngine(templateEngine());
        viewResolver.setCharacterEncoding("UTF-8");
        return viewResolver;
     }
+   
+   
+   @Bean
+   public ViewResolver configureViewResolver() {
+	   ResourceBundleViewResolver viewResolve = new ResourceBundleViewResolver();
+       viewResolve.setOrder(1);
+       viewResolve.setBasename("views");
+   
+       return viewResolve;
+   }
 	
 
 }

@@ -3,6 +3,8 @@
  */
 package com.hospedaje.backend.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,10 +22,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author rafael
  *
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "reservation")
 public class Reservation {
@@ -31,14 +38,16 @@ public class Reservation {
 	@Column(name = "id_reservation")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "create_at")
-	public Date createAt;
-	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "start_at")
+	public LocalDate startAt;
 	@Column(name = "finish_at")
-	public Date finishAt;
-	@Column(name = "day_use")
-	public int dayUse;
+	public LocalDate finishAt;
+	@Column(name = "n_people")
+	public int nPeople;
+	@Column(name = "registration_time")
+	public LocalDateTime resgitrationTime;
+	@Column(name = "card_number",length = 50)
+	public String cardNumber;
 	
 	@OneToOne(mappedBy = "reservation", cascade = CascadeType.ALL)
 	public Payment payment;

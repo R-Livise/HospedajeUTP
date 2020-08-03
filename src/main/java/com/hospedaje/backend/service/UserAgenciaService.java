@@ -8,56 +8,64 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import com.hospedaje.backend.model.UserAdministrator;
+import com.hospedaje.backend.model.UserAgencia;
+import com.hospedaje.backend.model.UserClient;
 import com.hospedaje.backend.model.UserHotel;
-import com.hospedaje.backend.repository.IUserRepository;
+import com.hospedaje.backend.repository.IUserAdministradorRepository;
+import com.hospedaje.backend.repository.IUserAgenciaRepository;
+import com.hospedaje.backend.repository.IUserClientRepository;
 import com.hospedaje.backend.service.interfaces.IUserService;
 
 /**
  * @author rafael
  *
  */
-@Service("User")
+@Service("Agencia")
 @Transactional
-public class UserService implements IUserService{
+public class UserAgenciaService implements IUserService{
 
 	@Autowired
-	public IUserRepository _userRepository;
-	
+	public IUserAgenciaRepository _userRepository;
+
 	@Override
 	public List<UserHotel> findAll() {
-		// TODO Auto-generated method stub
-		return _userRepository.findAll();
+		
+		return (List<UserHotel>)(List<?>)_userRepository.findAll();
 	}
 
 	@Override
 	public UserHotel findById(Long id) {
-		// TODO Auto-generated method stub
+
 		return _userRepository.findByID(id);
 	}
 
 	@Override
 	public void create(UserHotel userHotel) {
-		_userRepository.save(userHotel);
+		
+		_userRepository.save((UserAgencia)userHotel);
+		
 	}
 
 	@Override
 	public void update(UserHotel userHotel) {
-		_userRepository.save(userHotel);
+		
+		_userRepository.save((UserAgencia)userHotel);
 	}
 
 	@Override
 	public void deleteById(Long id) {
 		
-		UserHotel userHotel = _userRepository.findByID(id);
+		UserAgencia userHotel = _userRepository.findByID(id);
 		_userRepository.delete(userHotel);
 	}
-
+	
 	@Override
 	public UserHotel findByNickname(String nickname) {
 		
 		return _userRepository.findByNickname(nickname);
 	}
-
 }

@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.hospedaje.backend.model.Rol;
-import com.hospedaje.backend.model.Room;
-import com.hospedaje.backend.service.interfaces.IRolService;
-import com.hospedaje.backend.service.interfaces.IRoomService;
+import com.hospedaje.backend.model.Product;
+import com.hospedaje.backend.service.interfaces.IProductService;
 import com.hospedaje.backend.util.CustomErrorType;
 
 import io.swagger.annotations.Api;
@@ -32,88 +30,86 @@ import io.swagger.annotations.ApiResponses;
  * @author rafael
  *
  */
-
 @RestController
 @RequestMapping("/v1")
-@Api(tags = "room")
-public class RoomController {
-	
+@Api(tags = "product")
+public class ProductController {
+
 	@Autowired
-	IRoomService _roomService;
+	IProductService _productService;
 
 	// GET
 //		@PreAuthorize("hasRole('ROLE_ADMIN')")
-		@RequestMapping(value = "/room", method = RequestMethod.GET, headers = "Accept=application/json")
+		@RequestMapping(value = "/product", method = RequestMethod.GET, headers = "Accept=application/json")
 		@ApiOperation(value = "Listar Address", notes = "Servicio para listar todas las direcciones")
 		@ApiResponses(value = { @ApiResponse(code = 201, message = "Direcciones encontradas"),
 				@ApiResponse(code = 404, message = "Direccion no encontrados") })
-		public ResponseEntity<List<Room>> getAddress() {
+		public ResponseEntity<List<Product>> getAddress() {
 
-			List<Room> address = new ArrayList<>();
-			address = _roomService.findAll();
+			List<Product> address = new ArrayList<>();
+			address = _productService.findAll();
 			if (address.isEmpty()) {
 				return new ResponseEntity(HttpStatus.CONFLICT);
 			}
 			
-			return new ResponseEntity<List<Room>>(address, HttpStatus.OK);
+			return new ResponseEntity<List<Product>>(address, HttpStatus.OK);
 		}
 
 		
 		// GET
 //		@PreAuthorize("hasRole('ROLE_ADMIN')")
-		@RequestMapping(value = "/room/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
+		@RequestMapping(value = "/product/{id}", method = RequestMethod.GET, headers = "Accept=application/json")
 		@ApiOperation(value = "Listar direcciones por ID", notes = "Servicio para listar todas las direciones")
 		@ApiResponses(value = { @ApiResponse(code = 201, message = "Direcciones encontrados"),
 				@ApiResponse(code = 404, message = "Direcciones no encontrados") })
-		public ResponseEntity<Room> getAddressId(@PathVariable("id") Long idAddress) {
+		public ResponseEntity<Product> getAddressId(@PathVariable("id") Long idAddress) {
 			
 			if (idAddress == null || idAddress <= 0) {
 				return new ResponseEntity(new CustomErrorType("direcciones is required"), HttpStatus.CONFLICT);
 			}
 
-			Room address= _roomService.findById(idAddress);
+			Product address= _productService.findById(idAddress);
 			if (address == null) {
 				return new ResponseEntity(HttpStatus.CONFLICT);
 			}
-			return new ResponseEntity<Room>(address, HttpStatus.OK);
+			return new ResponseEntity<Product>(address, HttpStatus.OK);
 		}
-		
 		
 		// POST
 		@PreAuthorize("hasRole('ROLE_ADMIN')")
-		@RequestMapping(value = "/room", method = RequestMethod.POST, headers = "Accept=application/json")
+		@RequestMapping(value = "/product", method = RequestMethod.POST, headers = "Accept=application/json")
 		@ApiOperation(value = "Crear Reserva", notes = "Servicio para crear un nueva direccion")
 		@ApiResponses(value = { @ApiResponse(code = 201, message = "Direccion creada correctamente"),
 				@ApiResponse(code = 400, message = "Solicitud Inválida") })
-		public ResponseEntity<?> createAddress(@RequestBody Room address, UriComponentsBuilder uriComponentsBuilder) {
+		public ResponseEntity<?> createAddress(@RequestBody Product address, UriComponentsBuilder uriComponentsBuilder) {
 		
-			_roomService.create(address);
+			_productService.create(address);
 			
 			return new ResponseEntity(HttpStatus.OK);
 		}
 
 		// UPDATE
-		@RequestMapping(value = "/room/{id}", method = RequestMethod.PATCH, headers = "Accept=application/json")
+		@RequestMapping(value = "/product/{id}", method = RequestMethod.PATCH, headers = "Accept=application/json")
 		@ApiOperation(value = "Actualizar Direcciones", notes = "Servicio para actualizar una direccion")
 		@ApiResponses(value = { @ApiResponse(code = 201, message = "Direcciones actualizada correctamente"),
 				@ApiResponse(code = 404, message = "Direcciones no encontrada") })
-		public ResponseEntity<Room> updateAddress(@PathVariable("id") Long idAddress,
-				@RequestBody Room address) {
+		public ResponseEntity<Product> updateAddress(@PathVariable("id") Long idAddress,
+				@RequestBody Product address) {
 			if (idAddress == null || idAddress <= 0) {
 				return new ResponseEntity(new CustomErrorType("direccion is required"), HttpStatus.CONFLICT);
 			}
 
 			address.setId(idAddress);
 			
-			_roomService.update(address);
+			_productService.update(address);
 			
-			Room newCurrentAddress = _roomService.findById(idAddress);
+			Product newCurrentAddress = _productService.findById(idAddress);
 			
-			return new ResponseEntity<Room>(newCurrentAddress, HttpStatus.OK);
+			return new ResponseEntity<Product>(newCurrentAddress, HttpStatus.OK);
 		}
 
 		// DELETE
-		@RequestMapping(value = "/room/{id}", method = RequestMethod.DELETE)
+		@RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
 		@ApiOperation(value = "Eliminar direccion", notes = "Servicio para eliminar una direccion")
 		@ApiResponses(value = { @ApiResponse(code = 201, message = "Direccion eliminada correctamente"),
 				@ApiResponse(code = 404, message = "Direccion no encontrada") })
@@ -122,13 +118,13 @@ public class RoomController {
 				return new ResponseEntity(new CustomErrorType("user is required"), HttpStatus.CONFLICT);
 			}
 
-			Room address = _roomService.findById(idAddress);
+			Product address = _productService.findById(idAddress);
 			if (address == null) {
 				return new ResponseEntity(HttpStatus.NO_CONTENT);
 			}
 
-			_roomService.deleteById(idAddress);
-			return new ResponseEntity<Room>(HttpStatus.OK);
+			_productService.deleteById(idAddress);
+			return new ResponseEntity<Product>(HttpStatus.OK);
 
 		}
 }

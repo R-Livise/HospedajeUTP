@@ -41,6 +41,8 @@ public class MyUserDetailService implements UserDetailsService{
 		UserHotel userH = _userRepository.findByNickname(nickname);
 		if (userH == null) {System.out.println("Esta vacio");}
 		
+		System.out.println(userH.getEmail());
+		System.out.println(userH.getPassword());		
 		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Rol role : userH.getRol()){

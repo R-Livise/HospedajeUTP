@@ -16,10 +16,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author rafael
  *
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "payment")
 public class Payment {
@@ -32,6 +37,8 @@ public class Payment {
 	public Double total;
 	@Column(name = "is_payment")
 	public boolean isPayment;
+	
+	
 	
 	@OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
 	public Set<Consumption> consumption;

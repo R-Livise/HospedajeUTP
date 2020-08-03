@@ -1,15 +1,17 @@
 /**
  * 
  */
-package com.hospedaje.backend.security;
+package com.hospedaje.backend.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -46,7 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
 				.authorizeRequests()
-//				.antMatchers("/login").permitAll()
+					.antMatchers("/login").permitAll()
+//					.antMatchers("/swagger-ui.html").permitAll()
 				.antMatchers("/**").permitAll()
 //				.antMatchers(HttpMethod.GET,"/v1/plate/**").hasAnyRole("ADMIN","RECEP","CLIEN")
 //				.antMatchers(HttpMethod.GET,"/v1/menu").permitAll()
@@ -59,14 +62,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //				.and().formLogin().loginPage("/login").permitAll()
 //				.failureUrl("/login?error=true")
 //				.defaultSuccessUrl("/swagger-ui.html")
-				.and().exceptionHandling()
-				.and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.and()
+				.exceptionHandling()
+				.and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
 	
+	@Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+                .antMatchers(HttpMethod.OPTIONS, "/**")    // <---------- You need this
+                .antMatchers(
+                        "/**/*.{js,html,css,ico}",
+                        "/i18n/**",
+                        "/assets/**",
+                        "/v2/api-docs/**",
+                        "/webjars/**",
+                        "/swagger-resources/**",
+                        "/swagger-ui.html");
+    }
 	
 	
 	@Override
